@@ -1,0 +1,36 @@
+{
+  "name": "pstack",
+  "version": "0.1.0",
+  "description": "pstack engineering workflows adapted for Codex: deliberate design, independent review, and verified changes.",
+  "author": {
+    "name": "Lauren Tan"
+  },
+  "homepage": "https://github.com/mcansh/pstack-codex",
+  "repository": "https://github.com/mcansh/pstack-codex",
+  "license": "MIT",
+  "keywords": [
+    "pstack",
+    "poteto-mode",
+    "workflow",
+    "principles",
+    "agent-style",
+    "subagents",
+    "unslop"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "pstack for Codex",
+    "shortDescription": "Go deep first. Ship less, better code.",
+    "longDescription": "pstack engineering workflows adapted for Codex: deliberate design, independent review, and verified changes.",
+    "developerName": "mcansh; upstream by Lauren Tan",
+    "category": "Productivity",
+    "capabilities": [
+      "Instructions"
+    ],
+    "defaultPrompt": [
+      "Use pstack poteto-mode for this task."
+    ],
+    "logo": "./assets/logo.png",
+    "composerIcon": "./assets/logo.png"
+  }
+}

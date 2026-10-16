@@ -1,0 +1,21 @@
+{
+  "name": "mcansh-pstack",
+  "interface": {
+    "displayName": "mcansh pstack"
+  },
+  "plugins": [
+    {
+      "name": "pstack",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/mcansh/pstack-codex.git",
+        "ref": "main"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
