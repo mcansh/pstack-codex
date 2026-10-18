@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Validate the package and the audit's conservative worktree classification."""
+import argparse
 import json
 import os
 from pathlib import Path
@@ -7,7 +8,9 @@ import re
 import subprocess
 import tempfile
 
-ROOT = Path(__file__).resolve().parents[1]
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--root', type=Path, default=Path(__file__).resolve().parents[1])
+ROOT = parser.parse_args().root.resolve()
 
 
 def run(*args, cwd=None, env=None):
@@ -25,19 +28,21 @@ for path in (manifest['skills'], manifest['interface']['logo'], manifest['interf
     assert (ROOT / path).exists(), path
 assert 'Copyright (c) 2026 Lauren Tan' in (ROOT / 'LICENSE').read_text()
 skills = sorted((ROOT / 'skills').glob('*/SKILL.md'))
+repository_skills = sorted((ROOT / '.agents/skills').glob('*/SKILL.md'))
 assert skills
-for path in skills:
+for path in [*skills, *repository_skills]:
     text = path.read_text()
     assert text.startswith('---\n'), path
     frontmatter = text.split('---', 2)[1]
     assert re.search(r'^name: ' + re.escape(path.parent.name) + r'$', frontmatter, re.M), path
     assert re.search(r'^description: .+', frontmatter, re.M), path
-    assert '../codex-runtime.md' in text, path
+    if path in skills:
+        assert '../codex-runtime.md' in text, path
 for path in (p for p in (ROOT / 'skills').rglob('*.md') if 'node_modules' not in p.parts):
     text = path.read_text()
     assert '.cursor/' not in text, path
     assert 'claude-opus-5-5-' not in text and 'grok-4.7-' not in text, path
-for path in [ROOT / 'README.md', ROOT / 'docs/COMPATIBILITY.md', *(p for p in (ROOT / 'skills').rglob('*.md') if 'node_modules' not in p.parts)]:
+for path in [ROOT / 'README.md', ROOT / 'docs/COMPATIBILITY.md', *repository_skills, *(p for p in (ROOT / 'skills').rglob('*.md') if 'node_modules' not in p.parts)]:
     for target in re.findall(r'\[[^\]\n]*\]\(([^)\s]+)\)', path.read_text()):
         if '://' in target or target.startswith(('#', '/', 'mailto:')) or '<' in target or target == 'url':
             continue

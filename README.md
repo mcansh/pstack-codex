@@ -41,6 +41,54 @@ The package check validates portable and Codex metadata, skill names and runtime
 
 ## Upstream
 
+### Sync upstream changes
+
+In this source checkout, ask Codex to use `$sync-upstream`, or say "sync pstack with upstream and adapt the changes for Codex."
+The [repository skill](.agents/skills/sync-upstream/SKILL.md) fetches upstream changes, resolves conflicts, and reviews Codex compatibility before applying them.
+
+To prepare the update manually, run:
+
+```sh
+python3 scripts/sync-upstream.py prepare
+```
+
+Requires Python 3, Git, and authenticated `gh` with access to GitHub. Use `--ref <commit-or-branch>` to select a revision.
+The command merges against the revision in `docs/UPSTREAM.json` and preserves this fork's Codex edits.
+Review the candidate in `.pstack/upstream-sync/tree` and its `plan.json`, then adapt any new Cursor instructions and resolve conflicts.
+New skills receive the Codex runtime pointer automatically. Their instructions still need a compatibility review.
+
+After review, run:
+
+```sh
+python3 scripts/check-plugin.py --root .pstack/upstream-sync/tree
+python3 scripts/sync-upstream.py apply --reviewed
+python3 scripts/check-plugin.py
+```
+
+Apply validates the candidate and refuses local file changes made since preparation. Upstream provenance advances when the update is applied.
+Use a fresh `--stage <directory>` for subsequent updates. Neither command commits or publishes changes.
+For offline verification, `--source <local-git-repository>` reads revisions from a repository containing `pstack/`.
+
+Run the sync regression suite with `python3 scripts/test-sync-upstream.py`.
+
+### Schedule upstream updates
+
+The [sync workflow](.github/workflows/sync-upstream.yml) checks upstream every Monday at 13:23 UTC. You can also run **Sync upstream pstack** manually from the Actions tab.
+When upstream changes exist, [Codex](https://developers.openai.com/codex/github-action/) resolves conflicts and adapts the staged skills for Codex.
+The workflow validates the result and opens a draft PR on `automation/sync-upstream`. Review and merge that PR to update the plugin.
+Checks skip Codex when no mapped upstream files changed or an update PR is already open.
+
+To enable the workflow after merging it into the default branch:
+
+1. Add `OPENAI_API_KEY` as a repository Actions secret. Codex runs use the API account's billing.
+2. In **Settings > Actions > General > Workflow permissions**, enable **Allow GitHub Actions to create and approve pull requests**.
+3. Optionally set the repository variable `UPSTREAM_SYNC_MODEL` to a model available to your API account. Otherwise the action uses Codex's default.
+
+Change the workflow's cron expression to adjust the cadence. Failed runs retain the staged candidate and Codex summary as artifacts for diagnosis.
+The adaptation job has a read-only GitHub token. A separate job opens the PR after validation; the workflow does not merge it.
+
+Run the workflow helper tests with `python3 scripts/test-sync-action.py`.
+
 MIT licensed. Copyright remains with Lauren Tan. [docs/UPSTREAM.json](docs/UPSTREAM.json) records the source revision and version. This port has its own version sequence beginning at `0.1.0`; it is not an official Cursor or OpenAI plugin.
 
 The original README and guide are preserved under [docs/upstream](docs/upstream/README.md) as historical Cursor documentation. Follow this README and the runtime contract for Codex installation and capabilities.
