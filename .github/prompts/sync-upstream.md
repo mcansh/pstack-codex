@@ -30,3 +30,4 @@ upstream lifecycle scripts. Do not apply, commit, push, or open a PR.
 
 Finish with a concise report of source revisions, adaptations, validation,
 remaining conflicts, and capabilities that could not be verified.
+Return this report as a string through Pullfrog's `set_output` tool.

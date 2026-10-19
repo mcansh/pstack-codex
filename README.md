@@ -74,18 +74,19 @@ Run the sync regression suite with `python3 scripts/test-sync-upstream.py`.
 ### Schedule upstream updates
 
 The [sync workflow](.github/workflows/sync-upstream.yml) checks upstream every Monday at 13:23 UTC. You can also run **Sync upstream pstack** manually from the Actions tab.
-When upstream changes exist, [Codex](https://developers.openai.com/codex/github-action/) resolves conflicts and adapts the staged skills for Codex.
+When upstream changes exist, [Pullfrog](https://docs.pullfrog.com/headless-action) runs the adaptation using your connected ChatGPT Codex subscription.
 The workflow validates the result and opens a draft PR on `automation/sync-upstream`. Review and merge that PR to update the plugin.
 Checks skip Codex when no mapped upstream files changed or an update PR is already open.
 
 To enable the workflow after merging it into the default branch:
 
-1. Add `OPENAI_API_KEY` as a repository Actions secret. Codex runs use the API account's billing.
-2. In **Settings > Actions > General > Workflow permissions**, enable **Allow GitHub Actions to create and approve pull requests**.
-3. Optionally set the repository variable `UPSTREAM_SYNC_MODEL` to a model available to your API account. Otherwise the action uses Codex's default.
+1. Install the [Pullfrog GitHub App](https://pullfrog.com) for this repository. The existing sync workflow invokes Pullfrog directly; no separate `pullfrog.yml` workflow is needed.
+2. From this checkout, run `npx pullfrog auth codex` and complete the ChatGPT sign-in. Pullfrog stores and refreshes a separate credential; do not upload your local `auth.json` or add an `OPENAI_API_KEY` secret for this workflow. Subscription usage limits still apply.
+3. In **Settings > Actions > General > Workflow permissions**, enable **Allow GitHub Actions to create and approve pull requests**.
+4. In Pullfrog's repository console, choose **Custom (set in workflow)** for the model. The workflow defaults to `openai/gpt-sol`; optionally set the repository variable `UPSTREAM_SYNC_MODEL` to another [Pullfrog OpenAI model specifier](https://docs.pullfrog.com/models).
 
 Change the workflow's cron expression to adjust the cadence. Failed runs retain the staged candidate and Codex summary as artifacts for diagnosis.
-The adaptation job has a read-only GitHub token. A separate job opens the PR after validation; the workflow does not merge it.
+The adaptation job has a read-only GitHub workflow token and OIDC permission for Pullfrog's credential exchange. Pullfrog runs with pushes disabled and shell isolation enabled. A separate job opens the PR after validation; the workflow does not merge it.
 
 Run the workflow helper tests with `python3 scripts/test-sync-action.py`.
 

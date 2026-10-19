@@ -19,6 +19,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: read
+      id-token: write
     outputs:
       publish: ${{ steps.export.outputs.publish }}
       base_sha: ${{ steps.prepare.outputs.base_sha }}
@@ -49,15 +50,6 @@ jobs:
           echo "provenance_sha=$(sha256sum .pstack/upstream-sync/tree/docs/UPSTREAM.json | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
           mkdir -p "$RUNNER_TEMP/pstack-sync/scripts"
           cp scripts/sync-action.py scripts/sync-upstream.py "$RUNNER_TEMP/pstack-sync/scripts/"
-      - name: Check Codex credentials
-        if: steps.prepare.outputs.has_changes == 'true'
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          if [ -z "$OPENAI_API_KEY" ]; then
-            echo '::error::Add the OPENAI_API_KEY repository secret to adapt upstream changes with Codex.'
-            exit 1
-          fi
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         if: steps.prepare.outputs.has_changes == 'true'
       - name: Install candidate dependencies
@@ -65,15 +57,22 @@ jobs:
         working-directory: .pstack/upstream-sync/tree/skills/poteto-mode/scripts
         run: bun install --frozen-lockfile --ignore-scripts
       - name: Adapt for Codex
+        id: adapt
         if: steps.prepare.outputs.has_changes == 'true'
-        uses: openai/codex-action@bdf19a4a223ec2549a3e2274a0cf61556bc07675 # v1
+        uses: pullfrog/pullfrog@ad4283a862b8377cb525a0f5bf30f17c023b18ea # v0
         with:
-          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
-          model: ${{ vars.UPSTREAM_SYNC_MODEL }}
-          permission-profile: ':workspace'
-          safety-strategy: drop-sudo
-          prompt-file: .github/prompts/sync-upstream.md
-          output-file: .pstack/codex-summary.md
+          model: ${{ vars.UPSTREAM_SYNC_MODEL || 'openai/gpt-sol' }}
+          timeout: 20m
+          push: disabled
+          shell: restricted
+          progress_comments: disabled
+          prompt_file: .github/prompts/sync-upstream.md
+          output_schema: '{"type":"string"}'
+      - name: Save adaptation summary
+        if: always() && steps.adapt.outputs.result != ''
+        env:
+          SUMMARY: ${{ steps.adapt.outputs.result }}
+        run: printf '%s\n' "$SUMMARY" > .pstack/codex-summary.md
       - name: Validate and apply reviewed candidate
         if: steps.prepare.outputs.has_changes == 'true'
         run: |
