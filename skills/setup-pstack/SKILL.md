@@ -36,4 +36,5 @@ interrogate reviewers: inherit-parent, inherit-parent
 
 For an explicit override, use `model=<supported-id>; reasoning_effort=<supported-effort>` as one role value (or one comma-separated panel seat). Read these as separate fields when spawning; omit unsupported fields. An unqualified value `inherit-parent` omits both fields.
 
-5. Report the path written. Every pstack invocation reads it afresh. If the session cannot spawn agents, explain that role settings cannot enable delegation. If the project lacks runtime verification, point to `$create-verification-skill` once.
+5. Report the path written. Every pstack invocation reads it afresh. If the session cannot spawn agents, explain that role settings cannot enable delegation.
+6. Check for a runtime verification skill or existing app harness and a formal verification skill. For each missing kind, offer once to generate it with [$create-verification-skill](../create-verification-skill/SKILL.md) or [$create-formal-verification-skill](../create-formal-verification-skill/SKILL.md). Explain that the first drives app behavior and the second checks a code property within stated bounds and assumptions. Generate only the kind the user accepts; otherwise continue without pushing.
