@@ -11,6 +11,7 @@ Read [Codex runtime contract](../codex-runtime.md) first.
 For a help request, read [README](../../README.md) and answer without starting the task. For a work request, read [poteto-mode](../poteto-mode/SKILL.md) and do the authorized work.
 
 - Setup and role models: [setup-pstack](../setup-pstack/SKILL.md).
+- Rewrite a prompt before sending it: [sharpen](../sharpen/SKILL.md). Returns a deeper prompt with expert methods, raw sources, and an outside check; leaves execution to a later request.
 - Understand code or rationale: [how](../how/SKILL.md), [why](../why/SKILL.md).
 - Design alternatives: [architect](../architect/SKILL.md), [arena](../arena/SKILL.md).
 - Review and impact: [interrogate](../interrogate/SKILL.md), [blast-radius](../blast-radius/SKILL.md).
