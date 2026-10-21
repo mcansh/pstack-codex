@@ -92,6 +92,25 @@ class SyncTests(unittest.TestCase):
         sync.apply(self.root, self.stage, True)
         self.assertEqual(before, sync.snapshot(sync.files(self.root)))
 
+    def test_no_content_changes_preserve_candidate_and_working_files(self):
+        before = sync.snapshot(sync.files(self.root))
+        for case in ('same revision', 'unrelated commit', 'ignored files'):
+            with self.subTest(case=case):
+                if case == 'unrelated commit':
+                    (self.source / 'other-plugin.txt').write_text('unrelated change\n')
+                    self.commit()
+                elif case == 'ignored files':
+                    self.put('.cursor-plugin/plugin.json', '{"version":"2.0.0"}')
+                    self.put('docs/harness/claude-code.md', 'ignored instructions\n')
+                    self.commit()
+                self.stage = self.root / '.pstack' / case.replace(' ', '-')
+                plan = self.prepare()
+                self.assertEqual(self.git('rev-parse', 'HEAD'), plan['target'])
+                self.assertEqual([], plan['changes'])
+                self.assertEqual(before, sync.snapshot(sync.files(self.stage / 'tree')))
+                sync.apply(self.root, self.stage, True)
+                self.assertEqual(before, sync.snapshot(sync.files(self.root)))
+
     def test_text_conflict_and_review_gate(self):
         path = 'skills/example/SKILL.md'
         original = (self.root / path).read_text()

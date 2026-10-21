@@ -182,14 +182,15 @@ def prepare(root, stage, source, ref):
         conflicts = [item for item in conflicts
                      if item['path'] != name and not item['path'].startswith(name + '/')]
         conflicts.append({'path': name, 'kind': 'file/directory'})
-    metadata['commit'] = target
-    for name in ('.cursor-plugin/plugin.json', '.claude-plugin/plugin.json', 'plugin.json'):
-        if name in new_raw:
-            version = json.loads(new_raw[name][0]).get('version')
-            if version:
-                metadata['version'] = version
-                break
-    candidate['docs/UPSTREAM.json'] = ((json.dumps(metadata, indent=2) + '\n').encode(), initial['docs/UPSTREAM.json'][1])
+    if changes:
+        metadata['commit'] = target
+        for name in ('.cursor-plugin/plugin.json', '.claude-plugin/plugin.json', 'plugin.json'):
+            if name in new_raw:
+                version = json.loads(new_raw[name][0]).get('version')
+                if version:
+                    metadata['version'] = version
+                    break
+        candidate['docs/UPSTREAM.json'] = ((json.dumps(metadata, indent=2) + '\n').encode(), initial['docs/UPSTREAM.json'][1])
     plan = {'schema': 1, 'baseline': baseline, 'target': target, 'initial': snapshot(initial),
             'changes': changes, 'conflicts': conflicts, 'ignored': ignored,
             'status': 'needs-resolution' if conflicts else 'needs-review', 'tree': 'tree'}
@@ -203,7 +204,10 @@ def prepare(root, stage, source, ref):
                         if child == name or child.startswith(name + '/')})
     (stage / 'plan.json').write_text(json.dumps(plan, indent=2) + '\n')
     print(f'Staged {len(changes)} upstream changes with {len(conflicts)} conflicts at {stage}')
-    print('Review candidate, resolve conflicts, clear plan.json conflicts, then apply --reviewed.')
+    if changes:
+        print('Review candidate, resolve conflicts, clear plan.json conflicts, then apply --reviewed.')
+    else:
+        print('No upstream pstack content changes; working files and metadata remain unchanged.')
 
 
 def apply(root, stage, reviewed):
@@ -228,7 +232,8 @@ def apply(root, stage, reviewed):
     if 'docs/UPSTREAM.json' not in candidate:
         raise ValueError('Candidate lacks upstream metadata')
     metadata = json.loads(candidate['docs/UPSTREAM.json'][0])
-    if metadata.get('commit') != plan['target']:
+    expected_commit = plan['target'] if plan['changes'] else plan['baseline']
+    if metadata.get('commit') != expected_commit:
         raise ValueError('Candidate upstream commit does not match the sync plan')
     for name, (data, _) in candidate.items():
         if re.search(rb'^(<<<<<<< |=======\s*$|>>>>>>> )', data, re.M):

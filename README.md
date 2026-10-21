@@ -66,6 +66,7 @@ python3 scripts/check-plugin.py
 ```
 
 Apply validates the candidate and refuses local file changes made since preparation. Upstream provenance advances when the update is applied.
+When upstream pstack content is unchanged, the candidate preserves all files, including upstream provenance; applying it makes no edits.
 Use a fresh `--stage <directory>` for subsequent updates. Neither command commits or publishes changes.
 For offline verification, `--source <local-git-repository>` reads revisions from a repository containing `pstack/`.
 
