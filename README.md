@@ -21,7 +21,9 @@ If Codex shows a namespaced skill name, use that exact name. `$poteto-help` expl
 
 ## What is included
 
-All 56 upstream top-level skills, the 23 poteto-mode playbooks, principle references, two delegate prompt files, and the plan checker, PR watcher, orchestration store, and worktree audit tools. Run tools only when a workflow needs them. The TypeScript tools require Bun; PR operations also require authenticated `gh` or the upstream optional `origin` CLI. The worktree audit additionally needs Bash, Git, jq, and standard Unix tools.
+All 57 upstream top-level skills, the 23 poteto-mode playbooks, principle references, two delegate prompt files, and the plan checker, PR watcher, orchestration store, and worktree audit tools. Run tools only when a workflow needs them. The TypeScript tools require Bun; PR operations also require authenticated `gh` or the upstream optional `origin` CLI. The worktree audit additionally needs Bash, Git, jq, and standard Unix tools.
+
+The [statechart skill](skills/statechart/SKILL.md) turns TLA+ models into Mermaid user flows, generates TLA+ skeletons from agreed charts, and compares modeled code with a spec. Its scripts require Node.js, Java 11 or later, and `TLA2TOOLS` pointing to `tla2tools.jar`. Optional PNG rendering uses `npx @mermaid-js/mermaid-cli`.
 
 The [Codex runtime contract](skills/codex-runtime.md) is read by every skill. It maps workflow concepts to the actual tools exposed in the session, respects agent limits, gives writers separate scopes, and keeps independent verification gates blocked when no independent agent exists. Same-model panels are independent attempts, not evidence of model diversity.
 
@@ -31,6 +33,7 @@ This port does not supply Cursor Custom Modes, Grok Bot routines, Benny automati
 
 ```sh
 python3 scripts/check-plugin.py
+node --test skills/statechart/scripts/test/statechart.test.mjs
 cd skills/poteto-mode/scripts
 bun install --frozen-lockfile
 bun run test
