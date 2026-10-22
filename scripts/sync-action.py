@@ -4,9 +4,9 @@ import argparse
 import importlib.util
 import json
 import os
-from pathlib import Path
 import re
 import subprocess
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('sync_upstream', ROOT / 'scripts/sync-upstream.py')
@@ -38,7 +38,7 @@ def verify(root, stage, original, applied=False):
     for name in changed:
         if not allowed(name):
             raise ValueError(f'Change outside upstream scope: {name}')
-        if name in tree and re.search(rb'^(<<<<<<< |=======\s*$|>>>>>>> )', tree[name][0], re.M):
+        if name in tree and re.search(rb'^(<<<<<<< |=======\s*$|>>>>>>> )', tree[name][0], re.MULTILINE):
             raise ValueError(f'Unresolved conflict markers: {name}')
     if json.loads(tree['docs/UPSTREAM.json'][0]).get('commit') != baseline['target']:
         raise ValueError('Upstream provenance differs from prepared target')

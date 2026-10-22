@@ -4,13 +4,13 @@ import argparse
 import hashlib
 import io
 import json
-from pathlib import Path, PurePosixPath
 import re
 import stat
 import subprocess
 import sys
 import tarfile
 import tempfile
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
 EXCLUDED = {'.git', '.pstack', 'node_modules', '__pycache__'}
@@ -236,7 +236,7 @@ def apply(root, stage, reviewed):
     if metadata.get('commit') != expected_commit:
         raise ValueError('Candidate upstream commit does not match the sync plan')
     for name, (data, _) in candidate.items():
-        if re.search(rb'^(<<<<<<< |=======\s*$|>>>>>>> )', data, re.M):
+        if re.search(rb'^(<<<<<<< |=======\s*$|>>>>>>> )', data, re.MULTILINE):
             raise ValueError(f'Unresolved conflict markers: {name}')
     subprocess.run([sys.executable, str(root / 'scripts/check-plugin.py'), '--root', str(stage / 'tree')], check=True)
     if snapshot(files(root)) != plan['initial']:

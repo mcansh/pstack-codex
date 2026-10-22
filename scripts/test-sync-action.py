@@ -2,10 +2,10 @@
 """Exercise scheduled sync boundaries using disposable repositories."""
 import importlib.util
 import json
-from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from pathlib import Path
 
 spec = importlib.util.spec_from_file_location('sync_action', Path(__file__).with_name('sync-action.py'))
 action = importlib.util.module_from_spec(spec)

@@ -2,11 +2,11 @@
 """Exercise sync using a local upstream and isolated Codex checkout."""
 import importlib.util
 import json
-from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 sys.dont_write_bytecode = True

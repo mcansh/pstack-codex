@@ -3,10 +3,10 @@
 import argparse
 import json
 import os
-from pathlib import Path
 import re
 import subprocess
 import tempfile
+from pathlib import Path
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--root', type=Path, default=Path(__file__).resolve().parents[1])
@@ -34,8 +34,8 @@ for path in [*skills, *repository_skills]:
     text = path.read_text()
     assert text.startswith('---\n'), path
     frontmatter = text.split('---', 2)[1]
-    assert re.search(r'^name: ' + re.escape(path.parent.name) + r'$', frontmatter, re.M), path
-    assert re.search(r'^description: .+', frontmatter, re.M), path
+    assert re.search(r'^name: ' + re.escape(path.parent.name) + r'$', frontmatter, re.MULTILINE), path
+    assert re.search(r'^description: .+', frontmatter, re.MULTILINE), path
     if path in skills:
         assert '../codex-runtime.md' in text, path
 for path in (p for p in (ROOT / 'skills').rglob('*.md') if 'node_modules' not in p.parts):
