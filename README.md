@@ -77,7 +77,7 @@ Run the sync regression suite with `python3 scripts/test-sync-upstream.py`.
 
 ### Schedule upstream updates
 
-The [sync workflow](.github/workflows/sync-upstream.yml) checks upstream every Monday at 13:23 UTC. You can also run **Sync upstream pstack** manually from the Actions tab.
+The [sync workflow](.github/workflows/sync-upstream.yml) checks upstream every Monday at 8:00 a.m. America/Detroit (Eastern time, adjusted for daylight saving time). You can also run **Sync upstream pstack** manually from the Actions tab.
 When upstream changes exist, [Pullfrog](https://docs.pullfrog.com/headless-action) runs the adaptation using your connected ChatGPT Codex subscription.
 The workflow validates the result and opens a draft PR on `automation/sync-upstream`. Review and merge that PR to update the plugin.
 Checks skip Codex when no mapped upstream files changed or an update PR is already open.

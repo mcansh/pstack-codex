@@ -2,7 +2,8 @@ name: Sync upstream pstack
 
 on:
   schedule:
-    - cron: '23 13 * * 1'
+    - cron: '0 8 * * 1'
+      timezone: America/Detroit
   workflow_dispatch:
 
 permissions: {}
@@ -67,7 +68,6 @@ jobs:
           shell: restricted
           progress_comments: disabled
           prompt_file: .github/prompts/sync-upstream.md
-          output_schema: '{"type":"string"}'
       - name: Save adaptation summary
         if: always() && steps.adapt.outputs.result != ''
         env:
