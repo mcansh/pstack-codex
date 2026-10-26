@@ -62,6 +62,7 @@ fi
 [ -s "$prs" ] || echo "[]" > "$prs"
 
 # Codex does not expose a stable workspace-scoped transcript directory.
+now=$(date +%s)
 echo "# base: $base"
 printf "SIZE\tAGE\tMERGED\tDIRTY\tREMOTE\tPR\tLAST_CHAT\tBUCKET\tWORKTREE\n"
 

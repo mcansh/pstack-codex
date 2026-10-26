@@ -20,11 +20,14 @@ For a help request, read [README](../../README.md) and answer without starting t
 - Formal proof: [create-formal-verification-skill](../create-formal-verification-skill/SKILL.md), [maintain-formal-verification-skill](../maintain-formal-verification-skill/SKILL.md). Use for races or invariants tests rarely reach; maintain checks when covered code changes.
 - Behavior charts: [statechart](../statechart/SKILL.md). Draw model-checked user flows, turn an agreed Mermaid chart into a TLA+ skeleton, or compare code with its spec.
 - Chat updates and decisions: [ketchup](../ketchup/SKILL.md). Lists every pending user decision with evidence and risk.
+- Video catch-up: [ketchup-video](../ketchup-video/SKILL.md). Requires an available video renderer and frame inspection tools; pending decisions remain in text.
 - Prior work: [recall](../recall/SKILL.md). Uses only exposed in-scope history.
 - Personal style and lessons: [automate-me](../automate-me/SKILL.md), [reflect](../reflect/SKILL.md).
 
 Playbooks belong to poteto-mode, not separate slash commands. Read its index to select bug fix, feature, refactoring, performance, shipping, babysit, or orchestration. Use `$poteto-mode` plus a concrete goal and a pass/fail check. Use the exact namespaced name shown by Codex if another plugin supplies the same skill name.
 
 Defaults inherit the current Codex model. Different-model panels require actual supported models. Cloud agents, persistent loops, Cursor Custom Modes, Grok Bot routines, and Benny automations are not supplied by this port. A session without delegates can work sequentially, but cannot claim independent verification. See [compatibility](../../docs/COMPATIBILITY.md).
+
+Check setup only when it changes the answer. If `~/.config/pstack/codex-models.md` is missing, roles inherit the parent model. For setup or cost questions, offer [setup-pstack](../setup-pstack/SKILL.md) once. For runtime proof questions, check for a project verification skill. For races or invariants, check for a formal verification skill and whether its recorded revision still covers the code.
 
 Keep the answer short. Give one concrete prompt when helpful and link the installed file or its actual public copy in mcansh/pstack-codex.

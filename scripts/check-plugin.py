@@ -75,6 +75,7 @@ with tempfile.TemporaryDirectory(prefix='pstack-check-') as tmp:
         output = run('bash', str(audit), '-b', 'main', str(repo), env=env)
         return next(line.split('\t') for line in output.splitlines() if line.endswith(str(worktree)))
     clean = row()
+    assert clean[1] == '0d', clean
     assert clean[6:8] == ['unknown', 'verify-liveness'], clean
     (worktree / 'tracked.txt').write_text('uncommitted\n')
     dirty = row()
