@@ -31,6 +31,8 @@ def verify(root, stage, original, applied=False):
             raise ValueError(f'Prepared plan field changed: {key}')
     if plan['conflicts']:
         raise ValueError('Unresolved upstream conflicts')
+    if not applied:
+        sync.reject_installed_dependencies(stage / 'tree')
     tree = sync.files(root if applied else stage / 'tree')
     current = sync.snapshot(tree)
     changed = sorted(name for name in current.keys() | baseline['initial'].keys()

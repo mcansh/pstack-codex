@@ -191,6 +191,19 @@ class SyncTests(unittest.TestCase):
         sync.apply(self.root, self.stage, True)
         self.assertEqual('incoming child\n', (self.root / name / 'new.md').read_text())
 
+    def test_candidate_node_modules_are_rejected(self):
+        self.put('agents/new.md', 'incoming agent\n')
+        self.commit()
+        self.prepare()
+        path = self.stage / 'tree/skills/example/node_modules/pkg/index.js'
+        path.parent.mkdir(parents=True)
+        path.write_text('installed\n')
+        before = sync.snapshot(sync.files(self.root))
+        with self.assertRaisesRegex(ValueError, 'Installed dependencies'):
+            sync.apply(self.root, self.stage, True)
+        self.assertEqual(before, sync.snapshot(sync.files(self.root)))
+        self.assertTrue(path.exists())
+
     def test_excluded_occupant_blocks_apply_before_any_write(self):
         self.put('assets/binary', b'incoming\0image')
         self.put('assets/zz-collision', 'incoming file\n')

@@ -47,6 +47,32 @@ def files(root):
     return result
 
 
+def installed_dependency_paths(root):
+    found = []
+    stack = [root]
+    while stack:
+        current = stack.pop()
+        try:
+            children = list(current.iterdir())
+        except FileNotFoundError:
+            continue
+        for child in children:
+            if child.is_symlink() or not child.is_dir():
+                continue
+            if child.name in EXCLUDED:
+                if child.name == 'node_modules':
+                    found.append(child.relative_to(root).as_posix())
+                continue
+            stack.append(child)
+    return sorted(found)
+
+
+def reject_installed_dependencies(root):
+    found = installed_dependency_paths(root)
+    if found:
+        raise ValueError('Installed dependencies are not allowed in the candidate: ' + ', '.join(found))
+
+
 def snapshot(tree):
     return {name: {'sha256': hashlib.sha256(data).hexdigest(), 'mode': mode}
             for name, (data, mode) in tree.items()}
@@ -228,6 +254,7 @@ def apply(root, stage, reviewed):
     current = files(root)
     if snapshot(current) != plan['initial']:
         raise ValueError('Local files changed since preparation; prepare a fresh stage')
+    reject_installed_dependencies(stage / 'tree')
     candidate = files(stage / 'tree')
     if 'docs/UPSTREAM.json' not in candidate:
         raise ValueError('Candidate lacks upstream metadata')
