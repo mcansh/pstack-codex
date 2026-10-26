@@ -51,8 +51,6 @@ jobs:
           echo "provenance_sha=$(sha256sum .pstack/upstream-sync/tree/docs/UPSTREAM.json | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
           mkdir -p "$RUNNER_TEMP/pstack-sync/scripts"
           cp scripts/sync-action.py scripts/sync-upstream.py "$RUNNER_TEMP/pstack-sync/scripts/"
-      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-        if: steps.prepare.outputs.has_changes == 'true'
       - name: Adapt for Codex
         id: adapt
         if: steps.prepare.outputs.has_changes == 'true'
@@ -78,6 +76,8 @@ jobs:
           python3 scripts/check-plugin.py
           python3 scripts/test-sync-upstream.py
           python3 scripts/test-sync-action.py
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        if: steps.prepare.outputs.has_changes == 'true'
       - name: Install reviewed tool dependencies
         if: steps.prepare.outputs.has_changes == 'true'
         working-directory: skills/poteto-mode/scripts

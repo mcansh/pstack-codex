@@ -2,6 +2,7 @@
 """Exercise scheduled sync boundaries using disposable repositories."""
 import importlib.util
 import json
+import re
 import subprocess
 import tempfile
 import unittest
@@ -99,6 +100,13 @@ class SyncActionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Working source changed'):
             self.verify()
 
+    def test_candidate_node_modules_are_rejected(self):
+        path = self.stage / 'tree/skills/example/node_modules/pkg/index.js'
+        path.parent.mkdir(parents=True)
+        path.write_text('installed\n')
+        with self.assertRaisesRegex(ValueError, 'Installed dependencies'):
+            self.verify()
+
     def test_export_contains_new_files_and_rejects_forbidden_removal(self):
         tree = action.sync.files(self.stage / 'tree')
         tree['agents/new.md'] = (b'new agent\n', 0o644)
@@ -114,6 +122,30 @@ class SyncActionTests(unittest.TestCase):
         (self.root / 'scripts/protected.py').unlink()
         with self.assertRaisesRegex(ValueError, 'outside upstream scope'):
             action.export(self.root, self.stage, self.original, patch)
+
+
+class SyncReviewPolicyTests(unittest.TestCase):
+    def test_review_paths_keep_candidate_free_of_dependencies(self):
+        repo = Path(__file__).resolve().parents[1]
+        workflow_text = (repo / '.github/workflows/sync-upstream.yml').read_text()
+        prompt = (repo / '.github/prompts/sync-upstream.md').read_text()
+        skill = (repo / '.agents/skills/sync-upstream/SKILL.md').read_text()
+        names = re.findall(r'^      - (?:name: |uses: )(\S.*)$', workflow_text, re.MULTILINE)
+        self.assertNotIn('Install candidate dependencies', names)
+        self.assertLess(names.index('Adapt for Codex'), names.index('Validate and apply reviewed candidate'))
+        self.assertLess(names.index('Validate and apply reviewed candidate'),
+                        next(index for index, name in enumerate(names) if name.startswith('oven-sh/setup-bun@')))
+        self.assertLess(next(index for index, name in enumerate(names) if name.startswith('oven-sh/setup-bun@')),
+                        names.index('Install reviewed tool dependencies'))
+        self.assertLess(names.index('Install reviewed tool dependencies'), names.index('Check reviewed tools'))
+        self.assertLess(names.index('Check reviewed tools'), names.index('Export bounded update'))
+        self.assertNotIn('running candidate checks', prompt)
+        self.assertNotIn("Run the staged Bun tools' tests", skill)
+        self.assertIn("Skip the skill's Bun test, typecheck, and apply steps", prompt)
+        self.assertIn('Do not run Bun tests, typecheck, `bun install`, `orch.ts`, or `watch-pr` against the candidate', skill)
+        self.assertIn('Keep the candidate free of installed dependencies', prompt)
+        self.assertIn('Keep the candidate free of installed dependencies', skill)
+        self.assertIn('After apply, install reviewed tool dependencies', skill)
 
 
 if __name__ == '__main__':
