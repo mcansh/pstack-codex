@@ -21,6 +21,6 @@ Every skill reads `skills/codex-runtime.md`. Its mappings apply to referenced pl
 
 Packaging follows [OpenAI's plugin packaging guide](https://developers.openai.com/plugins/build/plugins), with a portable root manifest and a Codex compatibility overlay.
 
-The original Cursor tutorial is preserved under `docs/upstream/` for provenance, not as a Codex runbook. The runtime contract and active skill files govern this port. The bundled Bun tools retain upstream dependency versions and behavioral tests; the worktree audit alone changes runtime behavior to avoid relying on private Cursor history.
+The original Cursor tutorial is preserved under `docs/upstream/` for provenance, not as a Codex runbook. The runtime contract and active skill files govern this port. The bundled tools retain upstream dependency versions and behavioral tests. Statechart runs TypeScript with Node, Bun, or Deno and uses Node for its test suite. The worktree audit avoids relying on private Cursor history.
 
 Validation checks package structure and local tools. An installed-session smoke test is still needed to assess routing and agent behavior in a particular Codex host. Remote PR operations, cloud execution, and long-running scheduling require separate end-to-end validation against actual host capabilities.

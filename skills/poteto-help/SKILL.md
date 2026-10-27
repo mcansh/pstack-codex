@@ -18,7 +18,7 @@ For a help request, read [README](../../README.md) and answer without starting t
 - Parallel work: [swarm](../swarm/SKILL.md). Requires available agent tools and respects their capacity.
 - App proof: [create-verification-skill](../create-verification-skill/SKILL.md), [maintain-verification-skill](../maintain-verification-skill/SKILL.md).
 - Formal proof: [create-formal-verification-skill](../create-formal-verification-skill/SKILL.md), [maintain-formal-verification-skill](../maintain-formal-verification-skill/SKILL.md). Use for races or invariants tests rarely reach; maintain checks when covered code changes.
-- Behavior charts: [statechart](../statechart/SKILL.md). Draw model-checked user flows, turn an agreed Mermaid chart into a TLA+ skeleton, or compare code with its spec.
+- Behavior charts: [statechart](../statechart/SKILL.md). Draw model-checked user flows with the shortest path to each state that breaks a rule.
 - Chat updates and decisions: [ketchup](../ketchup/SKILL.md). Lists every pending user decision with evidence and risk.
 - Video catch-up: [ketchup-video](../ketchup-video/SKILL.md). Requires an available video renderer and frame inspection tools; pending decisions remain in text.
 - Prior work: [recall](../recall/SKILL.md). Uses only exposed in-scope history.
