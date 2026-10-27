@@ -20,7 +20,7 @@ For a help request, read [README](../../README.md) and answer without starting t
 - Formal proof: [create-formal-verification-skill](../create-formal-verification-skill/SKILL.md), [maintain-formal-verification-skill](../maintain-formal-verification-skill/SKILL.md). Use for races or invariants tests rarely reach; maintain checks when covered code changes.
 - Behavior charts: [statechart](../statechart/SKILL.md). Draw model-checked user flows with the shortest path to each state that breaks a rule.
 - Chat updates and decisions: [ketchup](../ketchup/SKILL.md). Lists every pending user decision with evidence and risk.
-- Video catch-up: [ketchup-video](../ketchup-video/SKILL.md). Requires an available video renderer and frame inspection tools; pending decisions remain in text.
+- Subtitled video catch-up: [ketchup-video](../ketchup-video/SKILL.md). Requires an available video renderer and frame inspection tools; pending decisions remain in text.
 - Prior work: [recall](../recall/SKILL.md). Uses only exposed in-scope history.
 - Personal style and lessons: [automate-me](../automate-me/SKILL.md), [reflect](../reflect/SKILL.md).
 

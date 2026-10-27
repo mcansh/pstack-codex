@@ -34,6 +34,8 @@ architect runners: inherit-parent, inherit-parent
 interrogate reviewers: inherit-parent, inherit-parent
 ```
 
+Arena's cross-judge pool is ordered by preference. Arena tries supported explicit models from a different family than the parent, one at a time. `inherit-parent` and `auto` cannot satisfy that requirement. If no eligible judge is available, report the cross-family review as blocked rather than inventing a model or treating same-model review as equivalent.
+
 For an explicit override, use `model=<supported-id>; reasoning_effort=<supported-effort>` as one role value (or one comma-separated panel seat). Read these as separate fields when spawning; omit unsupported fields. An unqualified value `inherit-parent` omits both fields.
 
 5. Report the path written. Every pstack invocation reads it afresh. If the session cannot spawn agents, explain that role settings cannot enable delegation.
