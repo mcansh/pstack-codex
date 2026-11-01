@@ -5,6 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import type { Arbitrary } from "fast-check";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const skip = !process.env.TLA2TOOLS && "set TLA2TOOLS to the path of tla2tools.jar to run TLC";
@@ -80,7 +81,7 @@ const modelArbitrary = (fc: FastCheck) => {
     String.raw`"two\nlines"`,
     String.raw`"__proto__"`,
   );
-  const values = (value: object, maxLength = 4) =>
+  const values = (value: Arbitrary<string>, maxLength = 4) =>
     fc.uniqueArray(value, { minLength: 1, maxLength });
   const DOMAIN = fc.oneof(
     values(INT),
