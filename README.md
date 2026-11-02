@@ -40,7 +40,7 @@ bun run test
 bun run typecheck
 ```
 
-The package check validates portable and Codex metadata, skill names and runtime pointers, local Markdown links, absence of Cursor settings paths, documented `node --test` globs, and the worktree audit's behavior on a disposable Git repository. It does not exercise model behavior, remote agents, live PR operations, or every playbook. The Node suite skips TLC cases unless `TLA2TOOLS` is set. Its render tests install Pele and mermaid with npm on first run.
+The package check validates portable and Codex metadata, skill names and runtime pointers, local Markdown links, absence of Cursor settings paths, documented `node --test` globs, and the worktree audit's behavior on a disposable Git repository. It does not exercise model behavior, remote agents, live PR operations, or every playbook. The Node suite skips TLC cases unless `TLA2TOOLS` is set. Its render tests install Pele and mermaid with npm on every run.
 
 ## Upstream
 
