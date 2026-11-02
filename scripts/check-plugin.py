@@ -49,6 +49,8 @@ for path in [ROOT / 'README.md', ROOT / 'docs/COMPATIBILITY.md', *repository_ski
         target = target.split('#')[0]
         if target:
             assert (path.parent / target).exists(), f'{path.relative_to(ROOT)} -> {target}'
+for pattern in re.findall(r'node (?:--disable-warning=\S+ )?--test (\S+)', (ROOT / 'README.md').read_text()):
+    assert any(ROOT.glob(pattern)), f'README node --test matches no files: {pattern}'
 
 with tempfile.TemporaryDirectory(prefix='pstack-check-') as tmp:
     tmp = Path(tmp)
