@@ -21,9 +21,9 @@ If Codex shows a namespaced skill name, use that exact name. `$poteto-help` expl
 
 ## What is included
 
-All 57 upstream top-level skills, the 23 poteto-mode playbooks, principle references, two delegate prompt files, and the plan checker, PR watcher, and worktree audit tools. Run tools only when a workflow needs them. The plan checker and PR watcher require Bun. Statechart runs TypeScript on Node.js, Bun, or Deno. PR operations also require authenticated `gh` or the upstream optional `origin` CLI. The worktree audit additionally needs Bash, Git, jq, and standard Unix tools.
+All 58 upstream top-level skills, the 23 poteto-mode playbooks, principle references, two delegate prompt files, and the plan checker, PR watcher, and worktree audit tools. Run tools only when a workflow needs them. The plan checker runs on Node. The PR watcher requires Bun. Statechart runs TypeScript on Node.js, Bun, or Deno. PR operations also require authenticated `gh` or the upstream optional `origin` CLI. The worktree audit additionally needs Bash, Git, jq, and standard Unix tools.
 
-The [statechart skill](skills/statechart/SKILL.md) checks a TLA+ model and draws it as a Mermaid user flow, with the shortest path to each state that breaks a rule. Its scripts run on Node.js 22.18+, Bun 1.1.5+, or Deno 2.0+. The first run can install TLC and Java with mise; or set `TLA2TOOLS` to `tla2tools.jar` and `JAVA` to a Java 11+ binary. Optional SVG rendering uses Pele as described in the skill.
+The [statechart skill](skills/statechart/SKILL.md) checks a TLA+ model and draws it as a Mermaid user flow, with the shortest path to each state that breaks a rule. Its scripts run on Node 22.18 to 22.x, Node 23.6 or later, Bun 1.1.5 or later, or Deno 2.0 or later. The first run can install TLC and Java with mise; or set `TLA2TOOLS` to `tla2tools.jar` and `JAVA` to a Java 11+ binary. Optional SVG rendering uses Pele as described in the skill.
 
 The [Codex runtime contract](skills/codex-runtime.md) is read by every skill. It maps workflow concepts to the actual tools exposed in the session, respects agent limits, gives writers separate scopes, and keeps independent verification gates blocked when no independent agent exists. Same-model panels are independent attempts, not evidence of model diversity.
 
