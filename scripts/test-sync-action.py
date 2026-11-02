@@ -22,6 +22,7 @@ class SyncActionTests(unittest.TestCase):
         self.original = self.root / '.pstack/prepared-plan.json'
         action.sync.write_tree(self.root, {
             'docs/UPSTREAM.json': (b'{"commit":"old"}\n', 0o644),
+            'README.md': (b'old readme\n', 0o644),
             'skills/example/SKILL.md': (b'old\n', 0o644),
             'scripts/protected.py': (b'protected\n', 0o644),
         })
@@ -56,6 +57,10 @@ class SyncActionTests(unittest.TestCase):
     def test_mapped_change_is_detected(self):
         self.assertTrue(action.has_changes(self.stage))
         self.assertEqual(self.verify(), ['docs/UPSTREAM.json', 'skills/example/SKILL.md'])
+
+    def test_readme_candidate_change_is_allowed(self):
+        (self.stage / 'tree/README.md').write_text('updated readme\n')
+        self.assertIn('README.md', self.verify())
 
     def test_forbidden_candidate_change_and_removal(self):
         path = self.stage / 'tree/scripts/protected.py'
@@ -147,6 +152,10 @@ class SyncReviewPolicyTests(unittest.TestCase):
         self.assertIn('Keep the candidate free of installed dependencies', compact_prompt)
         self.assertIn('Keep the candidate free of installed dependencies', skill)
         self.assertIn('After apply, install reviewed tool dependencies', skill)
+        self.assertIn('Keep `README.md` current', compact_prompt)
+        self.assertIn('Keep `README.md` current', skill)
+        self.assertTrue(action.allowed('README.md'))
+        self.assertFalse(action.allowed('scripts/protected.py'))
 
 
 if __name__ == '__main__':

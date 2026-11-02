@@ -40,7 +40,10 @@ bun run test
 bun run typecheck
 ```
 
-The package check validates portable and Codex metadata, skill names and runtime pointers, local Markdown links, absence of Cursor settings paths, documented `node --test` globs, and the worktree audit's behavior on a disposable Git repository. It does not exercise model behavior, remote agents, live PR operations, or every playbook. The Node suite skips TLC cases unless `TLA2TOOLS` is set. Its render tests install Pele and mermaid with npm on every run.
+The package check validates portable and Codex metadata, skill names and runtime pointers, local Markdown links, and the absence of Cursor settings paths.
+It also checks the documented README skill and playbook counts, the documented `node --test` globs and other check commands, and the worktree audit's behavior on a disposable Git repository.
+It does not exercise model behavior, remote agents, live PR operations, or every playbook.
+The Node suite skips TLC cases unless `TLA2TOOLS` is set. Its render tests install Pele and mermaid with npm on every run.
 
 ## Upstream
 
@@ -59,6 +62,7 @@ Requires Python 3, Git, and authenticated `gh` with access to GitHub. Use `--ref
 The command merges against the revision in `docs/UPSTREAM.json` and preserves this fork's Codex edits.
 Review the candidate in `.pstack/upstream-sync/tree` and its `plan.json`, then adapt any new Cursor instructions and resolve conflicts.
 New skills receive the Codex runtime pointer automatically. Their instructions still need a compatibility review.
+When the adapted candidate changes anything this README documents, update `README.md` in the candidate before apply.
 
 After review, run:
 
@@ -79,6 +83,7 @@ Run the sync regression suite with `python3 scripts/test-sync-upstream.py`.
 
 The [sync workflow](.github/workflows/sync-upstream.yml) checks upstream every four hours at midnight, 4 a.m., 8 a.m., noon, 4 p.m., and 8 p.m. America/Detroit (Eastern time, adjusted for daylight saving time). You can also run **Sync upstream pstack** manually from the Actions tab.
 When upstream changes exist, [Pullfrog](https://docs.pullfrog.com/headless-action) runs the adaptation using your connected ChatGPT Codex subscription.
+The adaptation must keep this README current when the candidate changes documented facts.
 The workflow validates the result and opens a draft PR on `automation/sync-upstream`. Review and merge that PR to update the plugin.
 Checks skip Codex when no mapped upstream files changed or an update PR is already open.
 

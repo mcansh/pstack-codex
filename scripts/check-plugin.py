@@ -49,8 +49,23 @@ for path in [ROOT / 'README.md', ROOT / 'docs/COMPATIBILITY.md', *repository_ski
         target = target.split('#')[0]
         if target:
             assert (path.parent / target).exists(), f'{path.relative_to(ROOT)} -> {target}'
-for pattern in re.findall(r'node (?:--disable-warning=\S+ )?--test (\S+)', (ROOT / 'README.md').read_text()):
+readme = (ROOT / 'README.md').read_text()
+playbooks = sorted((ROOT / 'skills/poteto-mode/playbooks').glob('*.md'))
+skill_count = re.search(r'(\d+) upstream top-level skills', readme)
+playbook_count = re.search(r'(\d+) poteto-mode playbooks', readme)
+assert skill_count and int(skill_count.group(1)) == len(skills), (
+    f'README skill count {skill_count and skill_count.group(1)!r} != {len(skills)}')
+assert playbook_count and int(playbook_count.group(1)) == len(playbooks), (
+    f'README playbook count {playbook_count and playbook_count.group(1)!r} != {len(playbooks)}')
+for pattern in re.findall(r'node (?:--disable-warning=\S+ )?--test (\S+)', readme):
     assert any(ROOT.glob(pattern)), f'README node --test matches no files: {pattern}'
+for command in re.findall(r'python3 (scripts/\S+\.py)', readme):
+    assert (ROOT / command).is_file(), f'README python3 command is missing: {command}'
+for directory in re.findall(r'^cd (\S+)', readme, re.MULTILINE):
+    assert (ROOT / directory).is_dir(), f'README cd path is missing: {directory}'
+tools = json.loads((ROOT / 'skills/poteto-mode/scripts/package.json').read_text())
+for script in re.findall(r'bun run (\S+)', readme):
+    assert script in tools.get('scripts', {}), f'README bun run script is missing: {script}'
 
 with tempfile.TemporaryDirectory(prefix='pstack-check-') as tmp:
     tmp = Path(tmp)

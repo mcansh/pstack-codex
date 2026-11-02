@@ -16,7 +16,7 @@ spec.loader.exec_module(sync)
 
 def allowed(name):
     sync.safe_path(name)
-    return name.startswith(('skills/', 'agents/', 'assets/', 'docs/upstream/')) or name in ('LICENSE', 'docs/UPSTREAM.json')
+    return name.startswith(('skills/', 'agents/', 'assets/', 'docs/upstream/')) or name in ('LICENSE', 'docs/UPSTREAM.json', 'README.md')
 
 
 def has_changes(stage):

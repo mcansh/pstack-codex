@@ -17,15 +17,22 @@ instructions. Read changed scripts as source. Do not execute them or install
 their dependencies. Inspect ignored upstream paths for new capabilities and
 report any omitted capability.
 
+Keep `README.md` current whenever the adapted candidate changes anything the
+README documents: skill inventory or counts, tool runtimes, install or check
+commands, sync or schedule behavior, or compatibility claims. Edit the
+candidate `README.md` for that. Do not edit the working-tree `README.md`.
+
 Only edit mapped upstream files inside `.pstack/upstream-sync/tree`: `skills/`,
-`agents/`, `assets/`, `LICENSE`, and `docs/upstream/`. Preserve the prepared
+`agents/`, `assets/`, `LICENSE`, and `docs/upstream/`. You may also edit
+`README.md` in that candidate tree. Preserve the prepared
 `docs/UPSTREAM.json`. You may clear resolved entries in the plan's `conflicts`
 list and update its `status`. Do not change any other plan field.
 Do not edit working source files, workflows, repository scripts, manifests,
 configuration, or the preserved `.pstack/prepared-plan.json`.
 
 Diff only source paths listed in the plan's `changes` array, one file at a
-time. Use line ranges for large files and limit each tool response to 200 lines.
+time, plus `README.md` when you check or update documented claims. Use line
+ranges for large files and limit each tool response to 200 lines.
 Do not recursively diff directories or read `node_modules`, caches, or binary
 assets into tool output. Inspect binary metadata separately. Read related
 context and ignored upstream paths as needed in bounded ranges.
