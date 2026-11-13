@@ -81,7 +81,7 @@ Run the sync regression suite with `python3 scripts/test-sync-upstream.py`.
 
 ### Schedule upstream updates
 
-The [sync workflow](.github/workflows/sync-upstream.yml) checks upstream every four hours at midnight, 4 a.m., 8 a.m., noon, 4 p.m., and 8 p.m. America/Detroit (Eastern time, adjusted for daylight saving time). You can also run **Sync upstream pstack** manually from the Actions tab.
+The [sync workflow](.github/workflows/sync-upstream.yml) checks upstream every four hours at midnight, 4 a.m., 8 a.m., noon, 4 p.m., and 8 p.m. America/Detroit (Eastern time, adjusted for daylight saving time). You can also run **Sync upstream pstack** manually from the Actions tab. It is `schedule` and `workflow_dispatch` only, and the adaptation job runs only on the default branch. Those triggers are what keep a fork pull request from starting it. The adaptation job stays on GitHub-hosted `ubuntu-latest` because the pinned Pullfrog action's restricted shell needs Linux `unshare` PID namespaces, which macOS does not provide. Hosted runners are currently blocked by GitHub billing, so adaptation waits until that is resolved. The publish job runs on this repository's self-hosted Mac runner (`self-hosted`, `macOS`, `ARM64`). It only downloads the validated patch artifact and opens the draft PR. Checksums use `shasum`.
 When upstream changes exist, [Pullfrog](https://docs.pullfrog.com/headless-action) runs the adaptation using your connected ChatGPT Codex subscription.
 The adaptation must keep this README current when the candidate changes documented facts.
 The workflow validates the result and opens a draft PR on `automation/sync-upstream`. Review and merge that PR to update the plugin.
@@ -103,7 +103,7 @@ Run the workflow helper tests with `python3 scripts/test-sync-action.py`.
 
 The [Pullfrog workflow](.github/workflows/pullfrog.yml) accepts tasks from the Pullfrog console and its configured GitHub event automations. After installing the app, click **Verify manual installation** in the repository's Pullfrog console. Select your connected ChatGPT Codex subscription and model there.
 
-You can also run **Pullfrog** from the Actions tab with a prompt and optional run name. Agent pushes are limited to feature branches, and shell isolation stays enabled.
+You can also run **Pullfrog** from the Actions tab with a prompt and optional run name. Agent pushes are limited to feature branches, and shell isolation stays enabled. That workflow stays on GitHub-hosted `ubuntu-latest` so an arbitrary prompt never runs on the Mac.
 
 MIT licensed. Copyright remains with Lauren Tan. [docs/UPSTREAM.json](docs/UPSTREAM.json) records the source revision and version. This port has its own version sequence beginning at `0.1.0`; it is not an official Cursor or OpenAI plugin.
 
