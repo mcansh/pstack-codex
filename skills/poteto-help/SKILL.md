@@ -24,9 +24,9 @@ For a help request, read [README](../../README.md) and answer without starting t
 - Prior work: [recall](../recall/SKILL.md). Uses only exposed in-scope history.
 - Personal style and lessons: [automate-me](../automate-me/SKILL.md), [reflect](../reflect/SKILL.md).
 
-Playbooks belong to poteto-mode, not separate slash commands. Read its index to select bug fix, feature, refactoring, performance, shipping, babysit, or orchestration. Use `$poteto-mode` plus a concrete goal and a pass/fail check. Use the exact namespaced name shown by Codex if another plugin supplies the same skill name.
+Playbooks belong to poteto-mode, not separate slash commands. Read its index to select bug fix, feature, refactoring, performance, shipping, babysit, or planning. Large or cross-cutting programs route to figure-it-out; there is no orchestration playbook. Use `$poteto-mode` plus a concrete goal and a pass/fail check. Use the exact namespaced name shown by Codex if another plugin supplies the same skill name.
 
-Defaults inherit the current Codex model. Different-model panels require actual supported models. Cloud agents, persistent loops, Cursor Custom Modes, Grok Bot routines, and Benny automations are not supplied by this port. A session without delegates can work sequentially, but cannot claim independent verification. See [compatibility](../../docs/COMPATIBILITY.md).
+Defaults inherit the current Codex model and effort. Different-model panels require actual supported models and user configuration. Cloud agents, persistent loops, Cursor Custom Modes, Grok Bot routines, Benny automations, and the upstream Claude Code adapter are not supplied by this port. A session without delegates can work sequentially, but cannot claim independent verification. See [compatibility](../../docs/COMPATIBILITY.md).
 
 Check setup only when it changes the answer. If `~/.config/pstack/codex-models.md` is missing, roles inherit the parent model. For setup or cost questions, offer [setup-pstack](../setup-pstack/SKILL.md) once. For runtime proof questions, check for a project verification skill. For races or invariants, check for a formal verification skill and whether its recorded revision still covers the code.
 

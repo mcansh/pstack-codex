@@ -30,7 +30,7 @@ Update mode changes the rest of the flow:
 
 Locate the active workspace's transcripts before fanning out. Use the active history tools or an explicit in-scope transcript path. If unavailable, work from the visible conversation and report the gap. Use only explicitly exposed in-scope history, per the Codex runtime contract.
 
-Survey recent agent conversations within that scope for recurring patterns. Run multiple parallel subagents across slices of history (e.g. last 2-4 weeks, split into 3 slices so each has enough material). Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section of the **poteto-mode** skill. Each slice mining subagent reads transcripts from the workspace-scoped path the parent provides, looks for the signals below, and returns a short structured list of patterns it saw with evidence pointers. Default signals worth hunting:
+Survey recent agent conversations within that scope for recurring patterns. Run multiple parallel subagents across slices of history (e.g. last 2-4 weeks, split into 3 slices so each has enough material). Pick each subagent's reasoning level for the job, per the Subagents section of the **poteto-mode** skill. Each slice mining subagent reads transcripts from the workspace-scoped path the parent provides, looks for the signals below, and returns a short structured list of patterns it saw with evidence pointers. Default signals worth hunting:
 
 - Response preferences (length, tone, format, "dumb it down" corrections)
 - Delegation habits (subagents, models, specialized workflows, parallelism)
@@ -82,7 +82,7 @@ Show the draft to the user and take feedback. Expect multiple iterations. Cut ru
 
 ### 6. Land it
 
-Work in a worktree off main. Commit and open a PR. Don't push to main directly.
+Use an explicitly created worktree off the project's base branch when publishing is authorized. Commit and open a PR only within the user's grant; a request to draft a personal skill does not itself authorize publishing. Personal skills may stay at the approved personal path instead. Never push to a protected branch.
 
 ## Guardrails
 
