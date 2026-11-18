@@ -66,14 +66,14 @@ Correct the log, not the story. The audit never edits or removes a row, even an 
 
 ## Cross-model review of the trail
 
-Before handing back, spawn a subagent on a different model family from the one that did the work. Self-review is not a substitute. The subagent reads the audit trail and the run's transcript, then flags what the user should pay attention to. Not a redo of the work, a scan for what's suboptimal or risky. Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section of the **poteto-mode** skill.
+Before handing back, request independent review through a permitted agent tool. Default to parent-model and effort inheritance. Another vendor may be used only when explicitly configured and supported; otherwise report cross-vendor review as unavailable. An independent same-model review is useful but not model-diversity evidence. If no independent delegate is available, leave that gate blocked and do not label self-review as independent verification. Give the reviewer the trail and only exposed or explicitly supplied in-scope history; if no full transcript is available, provide the visible conversation and label the gap. It flags risks, not a redo of the work.
 
 - Decisions logged with weak or absent evidence.
 - Verification steps skipped or claimed without proof in the transcript.
 - Choices that look risky in hindsight (premature, scope-creeping, papering over a symptom).
 - Gaps the user would otherwise miss on a casual skim.
 
-Every reply for a run that produced a trail ends with an "Attention" section. Lead with the reviewer's model on its own line (`reviewed by <model>`), then list each flag pointing to specific rows or moments. "No flags" is a valid value. The model name is not.
+Every reply for a run that produced a trail ends with an "Attention" section. Name the actual reviewer and model when known, or state that independent or cross-vendor review was unavailable. List each flag with specific rows or moments. "No flags" requires a completed review, not a missing reviewer.
 
 ## Reviewing the trail
 

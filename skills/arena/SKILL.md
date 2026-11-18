@@ -27,7 +27,7 @@ If a candidate produces no output, proceed with N-1 and note the dropout.
 
 ## Phase C: Cross-judge
 
-After all Phase B candidates complete, read `arena cross-judge pool` from `~/.config/pstack/codex-models.md`. Try supported, explicitly configured models from a different family than the parent's, in pool order. `auto` and `inherit-parent` use the parent and cannot fill this seat. If the parent's family is unknown or no configured model from another family can run, skip the judge, pick the base alone in Phase D, and report the missing independent cross-family check. Do not invent model IDs or substitute another vendor.
+After all Phase B candidates complete, read `arena cross-judge pool` from `~/.config/pstack/codex-models.md`. Try supported, explicitly configured models from a different vendor than the parent's, in pool order. Determine vendors from provider metadata, not model-name prefixes. `auto` and `inherit-parent` use the parent and cannot fill this seat. If the parent's vendor is unknown or no configured model from another vendor can run, skip the judge, pick the base alone in Phase D, and report the missing independent cross-vendor check. Do not invent model IDs or substitute another vendor.
 
 Give the judge read-only scope in its prompt and only the actual agent-tool arguments. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with your reading in Phase D. Don't spawn it while candidates are still writing.
 
