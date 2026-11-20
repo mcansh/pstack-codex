@@ -83,11 +83,11 @@ Run the sync regression suite with `python3 scripts/test-sync-upstream.py`.
 
 ### Schedule upstream updates
 
-The [sync workflow](.github/workflows/sync-upstream.yml) checks upstream every four hours at midnight, 4 a.m., 8 a.m., noon, 4 p.m., and 8 p.m. America/Detroit (Eastern time, adjusted for daylight saving time). You can also run **Sync upstream pstack** manually from the Actions tab. It is `schedule` and `workflow_dispatch` only, and the adaptation job runs only on the default branch. Those triggers are what keep a fork pull request from starting it. The adaptation job and the publish job both run on GitHub-hosted `ubuntu-latest`. Adaptation needs `ubuntu-latest` because the pinned Pullfrog action's restricted shell needs Linux `unshare` PID namespaces. The publish job downloads the validated patch artifact and opens the draft PR. Checksums use `shasum`.
+The [sync workflow](.github/workflows/sync-upstream.yml) checks upstream every four hours at midnight, 4 a.m., 8 a.m., noon, 4 p.m., and 8 p.m. America/Detroit (Eastern time, adjusted for daylight saving time). You can also run **Sync upstream pstack** manually from the Actions tab. It is `schedule` and `workflow_dispatch` only, and the adaptation job runs only on the default branch. Those triggers are what keep a fork pull request from starting it. The adaptation job and the publish job both run on GitHub-hosted `ubuntu-latest`. Adaptation needs `ubuntu-latest` because the pinned Pullfrog action's restricted shell needs Linux `unshare` PID namespaces. The publish job downloads the validated patch artifact. Checksums use `shasum`.
 When upstream changes exist, [Pullfrog](https://docs.pullfrog.com/headless-action) runs the adaptation using your connected ChatGPT Codex subscription.
 The adaptation must keep this README current when the candidate changes documented facts.
-The workflow validates the result and opens a draft PR on `automation/sync-upstream`. Review and merge that PR to update the plugin.
-Checks skip Codex when no mapped upstream files changed or an update PR is already open.
+The workflow validates the result and updates the open PR on `automation/sync-upstream` or opens a draft PR if none is open. Each run builds the update from the default branch, so publishing can replace manual edits on `automation/sync-upstream`. Review and merge the PR to update the plugin.
+The workflow skips Codex when no mapped upstream files changed.
 
 To enable the workflow after merging it into the default branch:
 
