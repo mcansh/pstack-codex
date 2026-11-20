@@ -27,6 +27,8 @@ Large or cross-cutting programs route to `figure-it-out`. Upstream removed the o
 
 The [statechart skill](skills/statechart/SKILL.md) checks a TLA+ model and draws it as a Mermaid user flow, with the shortest path to each state that breaks a rule. Its scripts run on Node 22.18 to 22.x, Node 23.6 or later, Bun 1.1.5 or later, or Deno 2.0 or later. The first run can install TLC and Java with mise; or set `TLA2TOOLS` to `tla2tools.jar` and `JAVA` to a Java 11+ binary. Optional SVG rendering uses Pele as described in the skill.
 
+The statechart launcher requires a POSIX shell. On native Windows, invoke `node --disable-warning=ExperimentalWarning skills/statechart/scripts/statechart.ts SPEC.tla` directly with a supported Node version. The sources include Windows process-tree cleanup and TLC CRLF parsing; native Windows behavior still needs runtime validation.
+
 The [Codex runtime contract](skills/codex-runtime.md) is read by every skill. It maps workflow concepts to the actual tools exposed in the session, respects agent limits, gives writers separate scopes, and keeps independent verification gates blocked when no independent agent exists. Same-model panels are independent attempts, not evidence of model diversity.
 
 This port does not supply Cursor Custom Modes, Grok Bot routines, Benny automations, the upstream Claude Code harness adapter, a cloud-agent service, or a persistent overnight scheduler. The Codex runtime contract is this fork's harness adapter. Cloud and unattended workflows require capabilities provided by the host; installing skills cannot create them. `make-bot-ui` requires an existing documented webhook integration. See [compatibility](docs/COMPATIBILITY.md).
